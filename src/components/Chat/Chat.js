@@ -322,7 +322,7 @@ const Chat = () => {
                 const region = getRegion(locationData.state_prov);
                 await axios.post(`${baseURL}/api/auth/update-location`, { userId, location: locationData.state_prov });
                 await axios.post(`${baseURL}/api/auth/update-place`, { userId, location: locationData.state_prov });
-                console.log(locationData.state_prov, region);
+                // console.log(locationData.state_prov, region);
             }
         } catch (error) {
             console.error('Error updating location:', error);
