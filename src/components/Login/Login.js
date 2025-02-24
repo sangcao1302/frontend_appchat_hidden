@@ -266,7 +266,7 @@ const Login = ({ onLogin }) => {
         try {
             const res = await axios.post(`${baseURL}/api/auth/google`, { id_token });
 
-            alert(res.data.message);
+            // alert(res.data.message);
             setGoogleUser(res.data.user); // Store Google user data
 
             // Check if additional information is needed
@@ -304,7 +304,7 @@ const Login = ({ onLogin }) => {
                 age,
                 location,
             });
-            alert(response.data.message);
+            // alert(response.data.message);
             onLogin(response.data.token); // Pass token to parent component
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('userId', response.data.userId); // Store userId
