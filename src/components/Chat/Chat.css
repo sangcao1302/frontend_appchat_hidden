@@ -71,3 +71,34 @@
     font-style: italic;
     color: #007bff;
 }
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .header {
+        padding: 5px;
+    }
+
+    .messages {
+        padding: 5px;
+    }
+
+    .input-container {
+        padding: 5px;
+    }
+
+    .input-message {
+        padding: 5px;
+        margin-right: 5px;
+    }
+
+    .emoji-picker {
+        bottom: 50px;
+        /* Adjust based on the height of the input container */
+        right: 5px;
+    }
+
+    .message {
+        margin-bottom: 5px;
+        padding: 5px;
+    }
+}
