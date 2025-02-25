@@ -320,7 +320,7 @@ const Chat = () => {
             const locationData = await getLocation();
             if (locationData) {
                 const region = getRegion(locationData.state_prov);
-                await axios.post(`${baseURL}/api/auth/update-location`, { userId, location: locationData.state_prov });
+                await axios.post(`${baseURL}/api/auth/update-location`, { userId, ip: locationData.ip });
                 await axios.post(`${baseURL}/api/auth/update-place`, { userId, location: locationData.state_prov });
                 // console.log(locationData.state_prov, region);
             }
@@ -409,10 +409,10 @@ const Chat = () => {
         <div className="chat-container">
             <div className="header px-2 py-1">
                 <div className="row align-items-center g-0">
-                    <div className="nameApp col-md-6">
+                    <div className=" col-md-6 col-sm-10 w-50 d-flex ">
                         <span>Kết đôi - Hẹn Hò</span>
                     </div>
-                    <div className="col-md-6 d-flex justify-content-end">
+                    <div className="col-md-6 col-sm-2 w-50 d-flex justify-content-end">
                         <button type="button" className="btn btn-transparent text-white" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             <i className="fa fa-sign-out" aria-hidden="true"></i>
                         </button>

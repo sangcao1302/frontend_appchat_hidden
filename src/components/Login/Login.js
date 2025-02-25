@@ -341,8 +341,10 @@ const Login = ({ onLogin }) => {
                             required
                         >
                             <option value="" disabled>Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
+                            <option value="male">Nam</option>
+                            <option value="female">Nữ</option>
+                            <option value="LGBT nam">LGBT Nam</option>
+                            <option value="LGBT nữ">LGBT nữ</option>
                         </select>
                         <input
                             type="number"
@@ -369,24 +371,22 @@ const Login = ({ onLogin }) => {
                     </div>
                 </form>
             ) : (
-                    <div className="google-login mx-auto">
-                        <GoogleLogin
-                            onSuccess={handleGoogleLoginSuccess}
-                            onError={handleGoogleLoginFailure}
-                            render={(renderProps) => (
-                                <button className="google-login-button" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" width="20" height="20" />
-                                    Sign in with Google
-                                </button>
-                            )}
-                        />
-                        {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
-                    </div>
+                <div className="google-login mx-auto">
+                    <GoogleLogin
+                        onSuccess={handleGoogleLoginSuccess}
+                        onError={handleGoogleLoginFailure}
+                        render={(renderProps) => (
+                            <button className="google-login-button" onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" width="20" height="20" />
+                                Sign in with Google
+                            </button>
+                        )}
+                    />
+                    {errorMessage && <div className="alert alert-danger mt-3">{errorMessage}</div>}
+                </div>
             )}
         </div>
     );
 };
 
 export default Login;
-
-
