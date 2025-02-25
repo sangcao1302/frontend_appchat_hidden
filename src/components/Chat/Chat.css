@@ -1,106 +1,169 @@
-/* Chat.css */
+/* Main chat container */
 
 .chat-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    /* Full viewport height */
-    overflow: hidden;
-    /* Prevent scrolling */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+
+  width: 100%;
+  
+  background-color: #f0f2f5;
+  position: relative;
 }
 
+/* Header section */
 .header {
-    flex: 0 0 auto;
-    /* Header should not grow or shrink */
-    background-color: #333;
-    color: white;
-    padding: 10px;
+ 
+  background-color: black;
+  color: white;
+ 
+  font-weight: bold;
+  
 }
 
+/* Messages area */
 .messages {
-    flex: 1 1 auto;
-    /* Messages area should grow and shrink as needed */
-    overflow-y: auto;
-    /* Enable vertical scrolling */
-    padding: 10px;
-    background-color: #f5f5f5;
-}
-
-.input-container {
-    flex: 0 0 auto;
-    /* Input container should not grow or shrink */
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #fff;
-    border-top: 1px solid #ddd;
-}
-
-.input-message {
-    flex: 1 1 auto;
-    /* Input field should grow and shrink as needed */
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-.emoji-picker {
-    position: absolute;
-    bottom: 60px;
-    /* Adjust based on the height of the input container */
-    right: 10px;
-    z-index: 1000;
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .message {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 4px;
+  max-width: 60%;
+  padding: 10px 15px;
+  font-size: 0.9em;
+  border-radius: 18px;
+  line-height: 1.4;
+  display: inline-block;
+  position: relative;
+  margin-bottom: 5px;
 }
 
 .message.self {
-    background-color: #d1e7dd;
-    align-self: flex-end;
+  background-color: #0084ff;
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  text-align: right;
 }
 
 .message.other {
-    background-color: #f8d7da;
-    align-self: flex-start;
+  background-color: #e4e6eb;
+  color: black;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  text-align: left;
+}
+.typing {
+    font-size: 10px;
 }
 
-.typing-indicator {
-    font-style: italic;
-    color: #007bff;
+/* Timestamp styling */
+.timestamp {
+  font-size: 0.75em;
+  color: #888;
+  margin-top: 5px;
+  display: inline-block;
 }
 
-/* Media query for mobile devices */
-@media (max-width: 768px) {
-    .header {
-        padding: 5px;
-    }
+/* Input container */
+.input-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-top: 1px solid #ddd;
+  gap: 10px; /* Spacing between items */
+}
 
-    .messages {
-        padding: 5px;
-    }
+/* Input field styling */
+.input-message {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  font-size: 0.95em;
+  padding: 7px 15px;
+  width: 100%;
+  margin: 0; /* Remove margin to align perfectly */
+}
 
-    .input-container {
-        padding: 5px;
-    }
+/* Emoji, send, and dropdown buttons with consistent 18px icon size */
+.emoji-button,
+.input-container button[type="submit"],
+.dropdown-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #0084ff;
+  font-size: 1.125em; /* Set to about 18px */
+  display: flex;
+  align-items: center;
+  padding: 5px; /* Consistent padding for spacing */
+}
 
-    .input-message {
-        padding: 5px;
-        margin-right: 5px;
-    }
+/* Dropdown toggle button icon */
+.dropdown-toggle i {
+  color: #007bff;
+  font-size: 1.125em; /* Set to about 18px */
+}
 
-    .emoji-picker {
-        bottom: 50px;
-        /* Adjust based on the height of the input container */
-        right: 5px;
-    }
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  bottom: 60px; /* Positioning relative to input container */
+  right: 15px;
+  z-index: 1000;
+  display: none;
+  min-width: 8rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  color: #212529;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
 
-    .message {
-        margin-bottom: 5px;
-        padding: 5px;
-    }
+/* Show dropdown menu when the .show class is added */
+.dropdown-menu.show {
+  display: block;
+}
+
+/* Dropdown menu items */
+.dropdown-menu li {
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f8f9fa;
+}
+
+/* Break chat button styling inside dropdown */
+.break-chat-button {
+  background: black;
+
+  color: white;
+  font-size: 1.125em; /* Set to about 18px */
+  
+}
+
+
+
+.break-chat-button span {
+  margin-right: 5px;
+}
+
+/* Emoji picker */
+.emoji-picker {
+  position: absolute;
+  bottom: 50px;
+  left: 10px;
+  z-index: 10;
 }
