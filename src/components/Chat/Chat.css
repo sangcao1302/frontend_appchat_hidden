@@ -107,11 +107,13 @@ overflow-y: scroll;
 }
 
 /* Dropdown toggle button icon */
-.dropdown-toggle i {
+/* .dropdown-toggle i {
   color: #007bff;
-  font-size: 1.125em; /* Set to about 18px */
+  font-size: 1.125em; 
+} */
+.dropdown-toggle::after{
+    display: none;
 }
-
 /* Dropdown menu */
 .dropdown-menu {
   position: absolute;

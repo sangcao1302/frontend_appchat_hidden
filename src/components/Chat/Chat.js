@@ -517,7 +517,7 @@ const sendMessage = async (e) => {
                     {showDropdown && (
                         <ul className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
                             <li>
-                                <button className="break-chat-button text-center btn bg-dark" onClick={breakChat}>
+                                <button className="break-chat-button text-center btn bg-dark d-flex align-items-center" onClick={breakChat}>
                                     <span className='text-danger'>End Chat</span>
                                     <FaTimes className='text-danger' />
                                 </button>
