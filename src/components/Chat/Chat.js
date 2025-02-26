@@ -259,14 +259,31 @@ const Chat = () => {
     const [isTyping, setIsTyping] = useState(false);  // Track if other user is typing
     const [isSending, setIsSending] = useState(false);
     const navigate = useNavigate();
-
-    // Define the typing timeout ref
-    const typingTimeoutRef = useRef(null);
-
+    const messagesEndRef = useRef(null);
+    console.log(userId)
+    let receiverId=""
+   
+    const user = async () => {
+        try {
+            const response = await axios.get(`${baseURL}/api/user/${userId}`);
+            if (response.status === 200) {
+                console.log(response.data)
+                return response.data
+            }
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    }
+   
     useEffect(() => {
         const fetchMessages = async () => {
+          const id=await user()
+          if(id.matchedUser !== null){
+            receiverId=id.matchedUser
             try {
-                const response = await axios.get(`${baseURL}/api/messages/${userId}`);
+
+                const response = await axios.get(`${baseURL}/api/messages/${userId}/${receiverId}`);
+
                 if (response.status === 200) {
                     setMessages(response.data.map(msg => ({
                         ...msg,
@@ -276,12 +293,16 @@ const Chat = () => {
             } catch (error) {
                 console.error('Error fetching messages:', error);
             }
-        };
+        }
+        }
+        
+
+        fetchMessages()
 
         // Initial connection and message fetching
         socket.emit('login', userId);
-        fetchMessages();
-
+       
+        
         // Socket event listeners
         socket.on('message', (message) => {
             setMessages(prev => [...prev, { ...message, isSelf: message.senderId === userId }]);
@@ -290,6 +311,7 @@ const Chat = () => {
             setMatchedUser(user);
             setWaiting(false);
         });
+        // fetchMessages();
         socket.on('waiting', () => setWaiting(true));
         socket.on('chatEnded', resetChat);
 
@@ -313,6 +335,13 @@ const Chat = () => {
             socket.off('stopTyping');
         };
     }, [userId]);
+
+    useEffect(() => {
+        // Scroll to the bottom of the messages container whenever new messages are added
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
     const startChat = useCallback(async () => {
         resetChat();
@@ -338,29 +367,46 @@ const Chat = () => {
         setShowDropdown(false);
         setIsTyping(false); // Clear typing indicator on reset
     }, []);
+// const setMatchedUserId=async(id)=>{
+//     try {
+//         await axios.post(`${baseURL}/api/auth/google/additional-info`, {
+//             matchedUser: id
+//         });
 
-    const sendMessage = async (e) => {
-        e.preventDefault();
-        if (input && matchedUser && !isSending) {
-            setIsSending(true);
-            const message = { text: input, receiverId: matchedUser.id, senderId: userId };
-
-            try {
-                const response = await axios.post(`${baseURL}/api/messages`, message);
-                if (response.status === 201 || response.status === 200) { // Allow both 200 and 201
-                    socket.emit('message', message);
-                    setMessages(prev => [...prev, { ...message, isSelf: true }]);
-                    setInput('');
-                    socket.emit('stopTyping', { receiverId: matchedUser.id }); // Stop typing when message is sent
-                }
-            } catch (error) {
-                console.error('Error sending message:', error.response ? error.response.data : error.message);
-                alert('Message failed to send.');
-            } finally {
-                setIsSending(false);
+//     } catch (error) {
+//         // Display error message
+//         console.error('Error match user id:', error);
+//     }
+// }
+const sendMessage = async (e) => {
+    e.preventDefault();
+    if (input && matchedUser && !isSending) {
+        setIsSending(true);
+        const message = { text: input, receiverId: matchedUser.id, senderId: userId };
+        console.log(matchedUser.id)
+    //   if(matchedUser.id!==matchedUser.id){
+    //     console.log(matchedUser.id)
+    //     setMatchedUserId(message.receiverId)
+    // }
+        try {
+            const response = await axios.post(`${baseURL}/api/messages`, message);
+            if (response.status === 201 || response.status === 200) { // Allow both 200 and 201
+                socket.emit('message', message);
+                setMessages(prev => [...prev, { ...message, isSelf: true }]);
+                setInput('');
+                socket.emit('stopTyping', { receiverId: matchedUser.id }); // Stop typing when message is sent
+            } else {
+                console.error('Unexpected response status:', response.status);
+                alert(`Message failed to send. Status: ${response.status}`);
             }
+        } catch (error) {
+            console.error('Error sending message:', error.response ? error.response.data : error.message);
+            alert(`Message failed to send. Error: ${error.response ? error.response.data.message : error.message}`);
+        } finally {
+            setIsSending(false);
         }
-    };
+    }
+};
 
     const onEmojiClick = (emojiData) => {
         setInput((prev) => prev + emojiData.emoji);
@@ -370,12 +416,14 @@ const Chat = () => {
     const breakChat = () => {
         socket.emit('endChat');
         resetChat();
+        // localStorage.removeItem("receiverId")
     };
 
     const toggleDropdown = () => setShowDropdown(prev => !prev);
 
     const handleLogout = () => {
-        localStorage.clear();
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId")
         navigate('/login');
         window.location.reload()
     };
@@ -439,6 +487,7 @@ const Chat = () => {
                 ))}
                 {waiting && <p>Waiting for a match...</p>}
                 {isTyping && <p className="typing-indicator fst-italic text-primary typing">Typing ....</p>} {/* Typing indicator */}
+                <div ref={messagesEndRef} />
             </div>
             {matchedUser ? (
                 <form className="input-container" onSubmit={sendMessage}>

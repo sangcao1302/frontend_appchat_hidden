@@ -254,6 +254,7 @@ const Login = ({ onLogin }) => {
             };
             updateLocation();
         }
+        
     }, [navigate]);
 
     const handleGoogleLoginSuccess = async (response) => {
@@ -287,6 +288,7 @@ const Login = ({ onLogin }) => {
             // Display error message
             setErrorMessage(error.response?.data?.message || 'An error occurred. Please try again.');
         }
+        
     };
 
     const handleGoogleLoginFailure = (error) => {
