@@ -541,10 +541,10 @@ const sendMessage = async (e) => {
                     <button type="submit" disabled={isSending}>
                         <FaPaperPlane />
                     </button>
-                    <button type="button" className="dropdown-toggle" onClick={toggleDropdown}>
+                    {/* <button type="button" className="dropdown-toggle" onClick={toggleDropdown}>
                         <FaEllipsisV />
-                    </button>
-                    {showDropdown && (
+                    </button> */}
+                    {/* {showDropdown && (
                         <ul className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
                             <li className='py-3 '>
                                 <button className="break-chat-button text-center " onClick={handleBan}>
@@ -555,9 +555,77 @@ const sendMessage = async (e) => {
                                     <span className='text-danger'>End Chat <FaTimes className='text-danger' /></span>
                                 </button>
                             </li>
-                          
+                           <li>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#endChatModal">
+                                    Endchat
+                                </button>
+                           </li>
                         </ul>
                     )}
+                    <div class="modal fade" id="endChatModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                               
+                                <div class="modal-body text-center fw-bold">
+                                    Are you sure you want to end the chat?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary fw-bold" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-danger fw-bold" onClick={breakChat}>Endchat</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  */}
+
+                    {/* <!-- Dropdown --> */}
+                    <div className="dropdown-center dropup">
+                        <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <FaEllipsisV />
+                        </button>
+                        <ul className="dropdown-menu px-2">
+                            <li >
+                                <button type="button" className="btn btn-danger border-0 py-2 " id='reportUser'  data-bs-toggle="modal" data-bs-target="#report">
+                                    Report User
+                                </button>
+                            </li>
+                            <li className='mt-2'>
+                                <button type="button" className="btn btn-danger border-0 " id='endchatUser' data-bs-toggle="modal" data-bs-target="#endchat">
+                                    End Chat
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* <!-- Modal (Placed Outside Dropdown) --> */}
+                    <div className="modal fade" id="endchat" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                               
+                                <div className="modal-body text-center">
+                                   Are you sure you want to end the chat?
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-primary fw-bold" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" className="btn btn-danger fw-bold"  onClick={breakChat}>Endchat</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal fade" id="report" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-body text-center">
+                                    Are you sure you want report this user?
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-primary fw-bold" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" className="btn btn-danger fw-bold" onClick={handleBan}>Report</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </form>
             ) : (
                 <button onClick={startChat} className="w-100 break-chat-button">Start Chat</button>

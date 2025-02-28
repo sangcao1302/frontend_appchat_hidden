@@ -111,8 +111,27 @@ overflow-y: scroll;
   color: #007bff;
   font-size: 1.125em; 
 } */
-.dropdown-toggle::after{
+/* .dropdown-toggle::after{
     display: none;
+} */
+.dropup .dropdown-toggle::after{
+    display: none;
+}
+
+ .dropup :hover{
+    background-color: #f8f9fa;
+    color:#0084ff;
+    border: none;
+}
+
+.btn-check:checked+.btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check)+.btn:active {
+    color: #0084ff;
+    background-color: transparent;
+    border-color: none;
 }
 /* Dropdown menu */
 .dropdown-menu {
@@ -145,8 +164,16 @@ overflow-y: scroll;
   justify-content: center;
 }
 
-.dropdown-menu li:hover {
-  background-color: #f8f9fa;
+#endchatUser:hover {
+   background-color: red;
+   color: white;
+}
+#reportUser:hover {
+    background-color: red;
+    color: white;
+}
+#endchatUser , #reportUser{
+    min-width: 100%;
 }
 
 /* Break chat button styling inside dropdown */
