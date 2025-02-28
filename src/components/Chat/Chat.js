@@ -432,9 +432,10 @@ const sendMessage = async (e) => {
         socket.emit('endChat');
         resetChat();
         // localStorage.removeItem("receiverId")
+        window.location.reload()
     };
 
-    const toggleDropdown = () => setShowDropdown(prev => !prev);
+    // const toggleDropdown = () => setShowDropdown(prev => !prev);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -476,7 +477,7 @@ const sendMessage = async (e) => {
             if(response.data.Ban === true){
                 socket.emit("banUser",matchedUser?.id);
             }
-
+            window.location.reload()
         } catch (error) {
             console.error('Error banning user:', error);
         }

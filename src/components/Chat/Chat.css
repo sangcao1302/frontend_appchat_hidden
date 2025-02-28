@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: space-between;
     height: 100dvh;
-overflow-y: scroll;
+    overflow-y: scroll;
   width: 100%;
   
   background-color: #f0f2f5;
@@ -26,7 +26,6 @@ overflow-y: scroll;
 .messages {
   flex: 1;
   padding: 10px;
-  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -107,14 +106,14 @@ overflow-y: scroll;
 }
 
 /* Dropdown toggle button icon */
-/* .dropdown-toggle i {
+ .dropdown-toggle i {
   color: #007bff;
   font-size: 1.125em; 
-} */
+} 
 /* .dropdown-toggle::after{
     display: none;
-} */
-/* .dropup .dropdown-toggle::after{
+}  */
+.dropup .dropdown-toggle::after{
     display: none;
 }
 
@@ -122,9 +121,9 @@ overflow-y: scroll;
     background-color: #f8f9fa;
     color:#0084ff;
     border: none;
-} */
+} 
 
-/* .btn-check:checked+.btn,
+.btn-check:checked+.btn,
 .btn.active,
 .btn.show,
 .btn:first-child:active,
@@ -132,7 +131,7 @@ overflow-y: scroll;
     color: #0084ff;
     background-color: transparent;
     border-color: none;
-} */
+}
 /* Dropdown menu */
 .dropdown-menu {
   position: absolute;
@@ -164,7 +163,7 @@ overflow-y: scroll;
   justify-content: center;
 }
 
-/* #endchatUser:hover {
+#endchatUser:hover {
    background-color: red;
    color: white;
 }
@@ -174,7 +173,7 @@ overflow-y: scroll;
 }
 #endchatUser , #reportUser{
     min-width: 100%;
-} */
+}
 
 /* Break chat button styling inside dropdown */
 .start-chat-button {
