@@ -543,8 +543,8 @@ const sendMessage = async (e) => {
                     </button>
                     {/* <button type="button" className="dropdown-toggle" onClick={toggleDropdown}>
                         <FaEllipsisV />
-                    </button> */}
-                    {/* {showDropdown && (
+                    </button> 
+                     {showDropdown && (
                         <ul className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
                             <li className='py-3 '>
                                 <button className="break-chat-button text-center " onClick={handleBan}>
@@ -577,8 +577,7 @@ const sendMessage = async (e) => {
                         </div>
                     </div>  */}
 
-                    {/* <!-- Dropdown --> */}
-                    <div className="dropdown-center dropup">
+                     <div className="dropdown-center dropup">
                         <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <FaEllipsisV />
                         </button>
@@ -596,7 +595,6 @@ const sendMessage = async (e) => {
                         </ul>
                     </div>
 
-                    {/* <!-- Modal (Placed Outside Dropdown) --> */}
                     <div className="modal fade" id="endchat" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog">
                             <div className="modal-content">
@@ -623,12 +621,12 @@ const sendMessage = async (e) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
 
 
                 </form>
             ) : (
-                <button onClick={startChat} className="w-100 break-chat-button">Start Chat</button>
+                <button onClick={startChat} className="w-100 start-chat-button">Start Chat</button>
             )}
         </div>
     );
