@@ -137,10 +137,12 @@ overflow-y: scroll;
 
 /* Dropdown menu items */
 .dropdown-menu li {
-  padding: 8px 16px;
+    
   cursor: pointer;
   display: flex;
   align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .dropdown-menu li:hover {
@@ -149,11 +151,14 @@ overflow-y: scroll;
 
 /* Break chat button styling inside dropdown */
 .break-chat-button {
-  background: black;
-
+ 
+    
   color: white;
   font-size: 1.125em; /* Set to about 18px */
-  
+  min-width: 100%;
+  border: none;
+  background-color: transparent;
+  /* border-top: 1px solid #ddd; */
 }
 
 

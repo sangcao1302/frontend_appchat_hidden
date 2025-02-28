@@ -333,8 +333,21 @@ const Chat = () => {
             socket.off('chatEnded');
             socket.off('typing');
             socket.off('stopTyping');
+            socket.off('forceLogout');
         };
     }, [userId]);
+    useEffect(() => {
+        // Listen for force logout from the server
+        socket.on("forceLogout", () => {
+            alert("❌ You have been logged out due to inactivity or disconnection.");
+            handleLogout();
+        });
+
+        return () => {
+            socket.off("forceLogout");
+        };
+    }, []);
+
 
     useEffect(() => {
         // Scroll to the bottom of the messages container whenever new messages are added
@@ -359,7 +372,9 @@ const Chat = () => {
 
         socket.emit('startChat', userId);
     }, [userId]);
+  
 
+   
     const resetChat = useCallback(() => {
         setMatchedUser(null);
         setWaiting(false);
@@ -452,6 +467,21 @@ const sendMessage = async (e) => {
             console.log('Emitting stopTyping event');
         }
     };
+    const handleBan = async () => {
+        breakChat();
+        try {
+            await axios.post(`${baseURL}/api/user/ban/${matchedUser?.id}`);
+
+            const response=await axios.get(`${baseURL}/api/user/${matchedUser?.id}`) 
+            if(response.data.Ban === true){
+                socket.emit("banUser",matchedUser?.id);
+            }
+
+        } catch (error) {
+            console.error('Error banning user:', error);
+        }
+    };
+  
 
     return (
         <div className="chat-container">
@@ -506,7 +536,7 @@ const sendMessage = async (e) => {
                         onChange={handleInputChange}
                         onBlur={handleBlur} // Stop typing when input loses focus
                         placeholder="Type a message..."
-                        required
+                        
                     />
                     <button type="submit" disabled={isSending}>
                         <FaPaperPlane />
@@ -516,12 +546,16 @@ const sendMessage = async (e) => {
                     </button>
                     {showDropdown && (
                         <ul className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
-                            <li>
-                                <button className="break-chat-button text-center btn bg-dark d-flex align-items-center" onClick={breakChat}>
-                                    <span className='text-danger'>End Chat</span>
-                                    <FaTimes className='text-danger' />
+                            <li className='py-3 '>
+                                <button className="break-chat-button text-center " onClick={handleBan}>
+                                    <span className='text-danger'>Report <FaTimes className='text-danger' /></span>                      
+                                </button>
+                                <hr className='border border-danger border-1 bg-dark w-100'></hr>
+                                <button className="break-chat-button text-center" onClick={breakChat}>
+                                    <span className='text-danger'>End Chat <FaTimes className='text-danger' /></span>
                                 </button>
                             </li>
+                          
                         </ul>
                     )}
                 </form>
