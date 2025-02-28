@@ -254,6 +254,8 @@ const Login = ({ onLogin }) => {
             };
             updateLocation();
         }
+       
+        navigate('/login');        
         
     }, [navigate]);
 
@@ -283,6 +285,7 @@ const Login = ({ onLogin }) => {
                 socket.emit('login', res.data.userId);
 
                 navigate('/chat', { state: { userId: res.data.userId } }); // Navigate to chat after login
+              
             }
         } catch (error) {
             // Display error message
@@ -314,7 +317,7 @@ const Login = ({ onLogin }) => {
             // Emit login event with userId
             socket.emit('login', response.data.userId);
 
-            navigate('/chat', { state: { userId: response.data.userId } }); // Navigate to chat after login
+            navigate('/policy'); // Navigate to chat after login
         } catch (error) {
             // Display error message
             setErrorMessage(error.response?.data?.message || 'An error occurred. Please try again.');

@@ -248,8 +248,9 @@ const baseURL = process.env.REACT_APP_BASE_URL;
 const socket = io(baseURL);
 
 const Chat = () => {
-    const { state } = useLocation();
-    const { userId } = state;
+ 
+    // const { state } = useLocation();
+    // const { userId } = state;
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [matchedUser, setMatchedUser] = useState(null);
@@ -260,7 +261,17 @@ const Chat = () => {
     const [isSending, setIsSending] = useState(false);
     const navigate = useNavigate();
     const messagesEndRef = useRef(null);
-    console.log(userId)
+    const userId = localStorage.getItem('userId');
+    const policyAccepted = localStorage.getItem('policyAccepted') === 'true';
+
+    useEffect(() => {
+        if (!policyAccepted) {
+            navigate('/policy', { replace: true });
+        } else if (!userId) {
+            navigate('/login', { replace: true });
+        }
+    }, [navigate, policyAccepted, userId]);
+    
     let receiverId=""
    
     const user = async () => {
@@ -276,6 +287,7 @@ const Chat = () => {
     }
    
     useEffect(() => {
+      
         const fetchMessages = async () => {
           const id=await user()
           if(id.matchedUser !== null){
@@ -585,7 +597,7 @@ const sendMessage = async (e) => {
                         <ul className="dropdown-menu px-2">
                             <li >
                                 <button type="button" className="btn btn-danger border-0 py-2 " id='reportUser'  data-bs-toggle="modal" data-bs-target="#report">
-                                    Report User
+                                    Report
                                 </button>
                             </li>
                             <li className='mt-2'>
@@ -596,7 +608,7 @@ const sendMessage = async (e) => {
                         </ul>
                     </div>
 
-                    <div className="modal fade" id="endchat" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal fade" id="endchat" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog">
                             <div className="modal-content">
                                
@@ -610,7 +622,7 @@ const sendMessage = async (e) => {
                             </div>
                         </div>
                     </div>
-                    <div className="modal fade" id="report" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal fade" id="report" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-body text-center">

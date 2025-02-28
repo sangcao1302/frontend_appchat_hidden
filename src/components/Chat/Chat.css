@@ -6,7 +6,7 @@
   justify-content: space-between;
     height: 100dvh;
     overflow-y: scroll;
-  width: 100%;
+  min-width: 100%;
   
   background-color: #f0f2f5;
   position: relative;
@@ -14,7 +14,6 @@
 
 /* Header section */
 .header {
- 
   background-color: black;
   color: white;
  
