@@ -242,6 +242,7 @@ import debounce from 'lodash.debounce';
 import './Chat.css';
 import getLocation from '../../utils/updateLocation';
 import { getRegion } from '../../utils/regions'; // Import the regions data
+import AutoModal from '../Popup/AutoModal';
 const baseURL = process.env.REACT_APP_BASE_URL;
 
 // Set the server URL from environment variables for deployment flexibility
@@ -495,9 +496,11 @@ const sendMessage = async (e) => {
         }
     };
   
-
     return (
+        
         <div className="chat-container">
+            <AutoModal />
+
             <div className="header px-2 py-1">
                 <div className="row align-items-center g-0">
                     <div className=" col-md-6 col-sm-10 w-50 d-flex ">
