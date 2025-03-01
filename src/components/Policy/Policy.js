@@ -4,54 +4,18 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const Policy = () => {
     const navigate = useNavigate();
-    const params =useParams();
-    const userId = localStorage.getItem('userId');
-    const location = useLocation(); 
-    // useEffect(() => {
-    //     // If the user tries to access /chat without checking the policy, redirect to /policy
-    //     if (checked && location.pathname === '/chat') {
-    //         console.log('checked');
-            
-    //         navigate('/policy', { replace: true }); // Prevent going back to /chat
-    //     }
-    // }, [location.pathname]);
-    // console.log(location.pathname);
-    // const handleCheck = () => {
-    //     setChecked(!checked);
-    // };
-
-    // const handleSubmit = () => {
-    //     if (checked===true) {
-    //         navigate('/chat', { state: { userId } });
-    //     }
-        
-    // };
-    const [checked, setChecked] = useState(() => {
-        return localStorage.getItem('policyAccepted') === 'true';
-    });
-
-    useEffect(() => {
-        // If the user tries to access /chat without checking the policy, redirect to /policy
-        if (!checked && location.pathname === '/chat') {
-            navigate('/policy', { replace: true }); // Prevent going back to /chat
-        }
-    }, [checked, location.pathname, navigate]);
-
+  
+    const [checked, setChecked] = useState("false");
     const handleCheck = () => {
-        setChecked(prev => {
-            localStorage.setItem('policyAccepted', (!prev).toString()); // Store in localStorage
-            return !prev;
-        });
+        setChecked("true")
     };
-
     const handleSubmit = () => {
-        if (checked) {
-            navigate('/chat', { state: { userId } }); // Navigate only if checked
-        } else {
-            alert('You must accept the policy before proceeding.');
-        }
-    };
-    console.log(checked);
+        if (checked==="true") {
+            localStorage.setItem('policyAccepted', checked);
+            navigate('/chat'); // Navigate only if checked
+        } 
+       
+    };   
     return (
         <div className="terms-container">
             <h1>Điều Khoản Sử Dụng</h1>
@@ -84,7 +48,7 @@ const Policy = () => {
                 <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" onClick={(handleCheck)}/>
                 <label className="form-check-label fw-bold fs-5 mx-2" htmlFor="inlineCheckbox1">Tôi đã đọc và đồng ý với tất cả điều khoản</label>
             </div>
-            <button type="button" className="btn btn-primary" disabled={!checked} onClick={handleSubmit} >Primary</button>
+            <button type="button" className="btn btn-danger mt-3" disabled={!checked} onClick={handleSubmit} >Chấp nhận</button>
         </div>
         
     );

@@ -261,14 +261,14 @@ const Login = ({ onLogin }) => {
 
     const handleGoogleLoginSuccess = async (response) => {
         const id_token = response.credential;
-
-        // Decode the id_token to get user information
-        // const decodedToken = jwtDecode(id_token);
-        // console.log("Decoded Token:", decodedToken);
+      
 
         try {
             const res = await axios.post(`${baseURL}/api/auth/google`, { id_token });
-
+            if (res.data.user.Ban===true) {
+                setErrorMessage('Tài khoản của bạn đã bị khóa');
+                return;
+            }
             // alert(res.data.message);
             setGoogleUser(res.data.user); // Store Google user data
 
