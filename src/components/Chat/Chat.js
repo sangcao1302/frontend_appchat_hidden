@@ -260,6 +260,7 @@ const Chat = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [isTyping, setIsTyping] = useState(false);  // Track if other user is typing
     const [isSending, setIsSending] = useState(false);
+    const [checked,setChecked]=useState(true)
     const navigate = useNavigate();
     const messagesEndRef = useRef(null);
     const userId = localStorage.getItem('userId');
@@ -375,8 +376,8 @@ const Chat = () => {
             const locationData = await getLocation();
             if (locationData) {
                 const region = getRegion(locationData.state_prov);
-                await axios.post(`${baseURL}/api/auth/update-location`, { userId, ip: locationData.ip });
-                await axios.post(`${baseURL}/api/auth/update-place`, { userId, location: locationData.state_prov });
+                // await axios.post(`${baseURL}/api/auth/update-location`, { userId, ip: locationData.ip });
+                // await axios.post(`${baseURL}/api/auth/update-place`, { userId, location: locationData.state_prov });
                 // console.log(locationData.state_prov, region);
             }
         } catch (error) {
@@ -495,7 +496,11 @@ const sendMessage = async (e) => {
             console.error('Error banning user:', error);
         }
     };
-  
+    const handleDarMode=()=>{
+        setChecked(!checked)
+        console.log(checked)
+        
+    }
     return (
         
         <div className="chat-container">
@@ -506,7 +511,11 @@ const sendMessage = async (e) => {
                     <div className=" col-md-6 col-sm-10 w-50 d-flex ">
                         <span>Kết đôi - Hẹn Hò</span>
                     </div>
-                    <div className="col-md-6 col-sm-2 w-50 d-flex justify-content-end">
+                    
+                    <div className="col-md-6 col-sm-2 w-50 d-flex justify-content-end align-items-center">
+                        <div className="form-check form-switch">
+                            <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onClick={handleDarMode} />
+                        </div>
                         <button type="button" className="btn btn-transparent text-white" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             <i className="fa fa-sign-out" aria-hidden="true"></i>
                         </button>
@@ -525,18 +534,18 @@ const sendMessage = async (e) => {
                     </div>
                 </div>
             </div>
-            <div className="messages">
+            <div className={checked ? 'messages' : 'modeDark'}>
                 {messages.map((msg, index) => (
                     <div key={index} className={`message ${msg.isSelf ? 'self' : 'other'}`}>
                         {msg.text}
                     </div>
                 ))}
-                {waiting && <p>Waiting for a match...</p>}
+                {waiting && <p className={checked ? '':'modeDarkWaiting'}>Waiting for a match...</p>}
                 {isTyping && <p className="typing-indicator fst-italic text-primary typing">Typing ....</p>} {/* Typing indicator */}
                 <div ref={messagesEndRef} />
             </div>
             {matchedUser ? (
-                <form className="input-container" onSubmit={sendMessage}>
+                <form className={checked ? 'input-container' : 'modeDarkFormInput'} onSubmit={sendMessage}>
                     <button type="button" className="emoji-button" onClick={() => setShowEmojiPicker(prev => !prev)}>
                         <FaRegSmile />
                     </button>
@@ -546,7 +555,7 @@ const sendMessage = async (e) => {
                         </div>
                     )}
                     <input
-                        className="input-message"
+                        className={checked ? 'input-message' : "modeDarkInput"}
                         type="text"
                         value={input}
                         onChange={handleInputChange}
@@ -554,7 +563,7 @@ const sendMessage = async (e) => {
                         placeholder="Type a message..."
                         
                     />
-                    <button type="submit" disabled={isSending}>
+                    <button type="submit" disabled={isSending} className={checked ? "" : "buttonSendMessage"}>
                         <FaPaperPlane />
                     </button>
                     {/* <button type="button" className="dropdown-toggle" onClick={toggleDropdown}>

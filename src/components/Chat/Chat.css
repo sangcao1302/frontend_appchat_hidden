@@ -11,7 +11,32 @@
   background-color: #f0f2f5;
   position: relative;
 }
-
+.modeDarkWaiting
+{
+    color: white;
+}
+.modeDark{
+    background-color: #212529;
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.modeDarkFormInput{
+    background-color: #212529;
+    display: flex;
+        align-items: center;
+        padding: 10px;
+        gap: 10px;
+        /* Spacing between items */
+        /* Remove margin to align perfectly */
+}
+.buttonSendMessage{
+    background-color: #212529;
+    color: #007bff;
+    border: none;
+}
 /* Header section */
 .header {
   background-color: black;
@@ -79,6 +104,18 @@
 }
 
 /* Input field styling */
+.modeDarkInput{
+    background-color: #212529;
+    color: white;
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    outline: none;
+    font-size: 0.95em;
+    padding: 7px 15px;
+    width: 100%;
+    margin: 0;
+}
 .input-message {
   flex: 1;
   border: 1px solid #ccc;
