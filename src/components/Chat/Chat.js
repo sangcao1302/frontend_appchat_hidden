@@ -376,8 +376,8 @@ const Chat = () => {
             const locationData = await getLocation();
             if (locationData) {
                 const region = getRegion(locationData.state_prov);
-                // await axios.post(`${baseURL}/api/auth/update-location`, { userId, ip: locationData.ip });
-                // await axios.post(`${baseURL}/api/auth/update-place`, { userId, location: locationData.state_prov });
+                await axios.post(`${baseURL}/api/auth/update-location`, { userId, ip: locationData.ip });
+                await axios.post(`${baseURL}/api/auth/update-place`, { userId, location: locationData.state_prov });
                 // console.log(locationData.state_prov, region);
             }
         } catch (error) {

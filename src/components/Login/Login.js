@@ -243,26 +243,11 @@ const Login = ({ onLogin }) => {
             // If a token exists, emit login event and navigate to chat
             socket.emit('login', userId);
             navigate('/chat', { state: { userId } }); // Redirect to chat
-
-            // Update the user's location
-            const updateLocation = async () => {
-                try {
-                    await axios.post(`${baseURL}/api/auth/update-location`, { userId });
-                } catch (error) {
-                    console.error('Error updating location:', error);
-                }
-            };
-            updateLocation();
         }
-       
-        navigate('/login');        
-        
     }, [navigate]);
 
     const handleGoogleLoginSuccess = async (response) => {
         const id_token = response.credential;
-      
-
         try {
             const res = await axios.post(`${baseURL}/api/auth/google`, { id_token });
             if (res.data.user.Ban===true) {
@@ -307,7 +292,6 @@ const Login = ({ onLogin }) => {
                 userId: googleUser._id,
                 gender,
                 age,
-                location,
             });
             // alert(response.data.message);
             onLogin(response.data.token); // Pass token to parent component
