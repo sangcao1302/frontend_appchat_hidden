@@ -260,12 +260,14 @@ const Chat = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [isTyping, setIsTyping] = useState(false);  // Track if other user is typing
     const [isSending, setIsSending] = useState(false);
-    const [checked,setChecked]=useState(true)
+    const [checked, setChecked] = useState(() => {
+        return localStorage.getItem('darkMode') === "true"; // Load from storage
+    });    
     const navigate = useNavigate();
     const messagesEndRef = useRef(null);
     const userId = localStorage.getItem('userId');
     const policyAccepted = localStorage.getItem('policyAccepted') === 'true';
-
+    const darkMode = localStorage.getItem('darkMode')
     useEffect(() => {
         if (!policyAccepted) {
             navigate('/policy', { replace: true });
@@ -275,7 +277,9 @@ const Chat = () => {
     }, [navigate, policyAccepted, userId]);
     
     let receiverId=""
-   
+    useEffect(() => {
+        localStorage.setItem('darkMode', checked); // Store the state
+    }, [checked]);
     const user = async () => {
         try {
             const response = await axios.get(`${baseURL}/api/user/${userId}`);
@@ -289,7 +293,6 @@ const Chat = () => {
     }
    
     useEffect(() => {
-      
         const fetchMessages = async () => {
           const id=await user()
           if(id.matchedUser !== null){
@@ -496,11 +499,9 @@ const sendMessage = async (e) => {
             console.error('Error banning user:', error);
         }
     };
-    const handleDarMode=()=>{
-        setChecked(!checked)
-        console.log(checked)
-        
-    }
+    const handleDarkMode = () => {
+        setChecked(prev => !prev); // Toggle dark mode state
+    };
     return (
         
         <div className="chat-container">
@@ -514,7 +515,7 @@ const sendMessage = async (e) => {
                     
                     <div className="col-md-6 col-sm-2 w-50 d-flex justify-content-end align-items-center">
                         <div className="form-check form-switch">
-                            <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onClick={handleDarMode} />
+                            <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked={checked} onChange={handleDarkMode} />
                         </div>
                         <button type="button" className="btn btn-transparent text-white" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             <i className="fa fa-sign-out" aria-hidden="true"></i>
@@ -534,18 +535,18 @@ const sendMessage = async (e) => {
                     </div>
                 </div>
             </div>
-            <div className={checked ? 'messages' : 'modeDark'}>
+            <div className={checked ? 'modeDark' : 'messages' }>
                 {messages.map((msg, index) => (
                     <div key={index} className={`message ${msg.isSelf ? 'self' : 'other'}`}>
                         {msg.text}
                     </div>
                 ))}
-                {waiting && <p className={checked ? '':'modeDarkWaiting'}>Waiting for a match...</p>}
+                {waiting && <p className={checked ? 'modeDarkWaiting' : ''}>Waiting for a match...</p>}
                 {isTyping && <p className="typing-indicator fst-italic text-primary typing">Typing ....</p>} {/* Typing indicator */}
                 <div ref={messagesEndRef} />
             </div>
             {matchedUser ? (
-                <form className={checked ? 'input-container' : 'modeDarkFormInput'} onSubmit={sendMessage}>
+                <form className={checked ? 'modeDarkFormInput' : 'input-container' } onSubmit={sendMessage}>
                     <button type="button" className="emoji-button" onClick={() => setShowEmojiPicker(prev => !prev)}>
                         <FaRegSmile />
                     </button>
@@ -555,7 +556,7 @@ const sendMessage = async (e) => {
                         </div>
                     )}
                     <input
-                        className={checked ? 'input-message' : "modeDarkInput"}
+                        className={checked ? "modeDarkInput" : 'input-message' }
                         type="text"
                         value={input}
                         onChange={handleInputChange}
@@ -563,7 +564,7 @@ const sendMessage = async (e) => {
                         placeholder="Type a message..."
                         
                     />
-                    <button type="submit" disabled={isSending} className={checked ? "" : "buttonSendMessage"}>
+                    <button type="submit" disabled={isSending} className={checked ? "buttonSendMessage" : "" }>
                         <FaPaperPlane />
                     </button>
                     {/* <button type="button" className="dropdown-toggle" onClick={toggleDropdown}>
@@ -651,7 +652,7 @@ const sendMessage = async (e) => {
 
                 </form>
             ) : (
-                <button onClick={startChat} className="w-100 start-chat-button">Start Chat</button>
+                <button onClick={startChat} className="w-100 start-chat-button py-2">Start Chat</button>
             )}
         </div>
     );
