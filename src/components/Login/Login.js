@@ -339,7 +339,7 @@ const Login = ({ onLogin }) => {
                             type="number"
                             className="form-control mt-3"
                             aria-label="Age"
-                            placeholder="Age"
+                            placeholder="Tuổi"
                             value={age}
                             onChange={(e) => setAge(e.target.value)}
                             required
