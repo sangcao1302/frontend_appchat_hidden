@@ -31,6 +31,17 @@ const Chat = () => {
     const userId = localStorage.getItem('userId');
     const policyAccepted = localStorage.getItem('policyAccepted') === 'true';
     const darkMode = localStorage.getItem('darkMode')
+
+    // Define resetChat before it's used in useEffect
+    const resetChat = useCallback(() => {
+        setMatchedUser(null);
+        setWaiting(false);
+        setMessages([]);
+        setShowDropdown(false);
+        setIsTyping(false); // Clear typing indicator on reset
+        setInput(''); // Reset input field
+    }, []);
+
     useEffect(() => {
         if (!policyAccepted) {
             navigate('/policy', { replace: true });
@@ -79,9 +90,30 @@ const Chat = () => {
 
         fetchMessages()
 
+        // Ensure socket connection is established
+        if (!socket.connected) {
+            socket.connect();
+        }
+
         // Initial connection and message fetching
         socket.emit('login', userId);
 
+        // Check for existing chat session
+        const checkExistingChat = async () => {
+            try {
+                const userData = await user();
+                if (userData && userData.matchedUser) {
+                    // User has an active chat session
+                    setMatchedUser(userData.matchedUser);
+                    setWaiting(false);
+                    console.log("Restored existing chat session with:", userData.matchedUser);
+                }
+            } catch (error) {
+                console.error('Error checking for existing chat:', error);
+            }
+        };
+
+        checkExistingChat();
 
         // Socket event listeners
         socket.on('message', (message) => {
@@ -91,17 +123,16 @@ const Chat = () => {
             setMatchedUser(user);
             setWaiting(false);
         });
-        // fetchMessages();
         socket.on('waiting', () => setWaiting(true));
         socket.on('chatEnded', resetChat);
 
         // Listen for typing events from the server
-        socket.on('typing', ({ userId }) => { // Updated to destructure userId
+        socket.on('typing', ({ userId }) => {
             console.log(`User ${userId} is typing...`);
             setIsTyping(true);
         });
 
-        socket.on('stopTyping', ({ userId }) => { // Updated to destructure userId
+        socket.on('stopTyping', ({ userId }) => {
             console.log(`User ${userId} stopped typing.`);
             setIsTyping(false);
         });
@@ -115,7 +146,7 @@ const Chat = () => {
             socket.off('stopTyping');
             socket.off('forceLogout');
         };
-    }, [userId]);
+    }, [userId, resetChat]);
     useEffect(() => {
         // Listen for force logout from the server
         socket.on("forceLogout", () => {
@@ -153,16 +184,6 @@ const Chat = () => {
         socket.emit('startChat', userId);
     }, [userId]);
 
-
-
-    const resetChat = useCallback(() => {
-        setMatchedUser(null);
-        setWaiting(false);
-        setMessages([]);
-        setShowDropdown(false);
-        setIsTyping(false); // Clear typing indicator on reset
-    }, []);
-
     useEffect(() => {
         // Request notification permission and update FCM token
         const setupNotifications = async () => {
@@ -170,7 +191,7 @@ const Chat = () => {
                 const fcmToken = await requestNotificationPermission();
                 if (fcmToken) {
                     // Update FCM token in backend
-                    await axios.post(`${baseURL}/api/notifications/update-token`, {
+                    await axios.post(`${baseURL}/api/fcm/token`, {
                         userId: userId,
                         fcmToken: fcmToken
                     });
@@ -204,7 +225,7 @@ const Chat = () => {
 
                     // Send notification to the receiver
                     try {
-                        await axios.post(`${baseURL}/api/notifications/send`, {
+                        await axios.post(`${baseURL}/api/fcm/send`, {
                             userId: matchedUser.id,
                             title: 'New Message',
                             body: input,
@@ -248,21 +269,20 @@ const Chat = () => {
 
     // Typing indicator handling with debounce
     const handleInputChange = (e) => {
-        setInput(e.target.value);
-        handleTyping(e);
-    };
+        const value = e.target.value;
+        setInput(value);
 
-    // Debounced function to emit typing event
-    const handleTyping = useCallback(debounce((e) => {
-        if (matchedUser) { // Ensure there is a matched user
-            socket.emit('typing', { receiverId: matchedUser.id });
-            console.log('Emitting typing event');
-            if (e.target.value.trim() === "") {
+        // Only emit typing events if there's a matched user
+        if (matchedUser) {
+            if (value.trim() === "") {
                 socket.emit('stopTyping', { receiverId: matchedUser.id });
                 console.log('Emitting stopTyping event');
+            } else {
+                socket.emit('typing', { receiverId: matchedUser.id });
+                console.log('Emitting typing event');
             }
         }
-    }, 500), [matchedUser]);
+    };
 
     const handleBlur = () => {
         if (matchedUser) { // Ensure there is a matched user
@@ -287,6 +307,19 @@ const Chat = () => {
     const handleDarkMode = () => {
         setChecked(prev => !prev); // Toggle dark mode state
     };
+
+    // Add this useEffect after the other useEffect hooks
+    useEffect(() => {
+        // Initialize input field
+        setInput('');
+
+        // Add event listener for input field
+        const inputField = document.querySelector('.chat-input');
+        if (inputField) {
+            inputField.focus();
+        }
+    }, []);
+
     return (
 
         <div className="chat-container">
